@@ -149,6 +149,11 @@ minikube service eyego-service --url
 
 ![](./imgs/minikube-service-url.png)
 
+- check using postman
+
+![](./imgs/minikube-service-postman.png)
+
+
 <!-- 
 ### 
 <details>
