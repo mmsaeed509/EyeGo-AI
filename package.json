@@ -1,0 +1,23 @@
+{
+  "name": "eyego-ai",
+  "version": "1.0.0",
+  "description": "test app",
+  "homepage": "https://github.com/mmsaeed509/EyeGo-AI#readme",
+  "bugs": {
+    "url": "https://github.com/mmsaeed509/EyeGo-AI/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mmsaeed509/EyeGo-AI.git"
+  },
+  "license": "ISC",
+  "author": "Mahmoud Mohamed @mmsaeed509",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
