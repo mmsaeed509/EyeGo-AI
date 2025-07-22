@@ -1,12 +1,3 @@
-#####################################
-#                                   #
-#  @author      : 00xWolf           #
-#    GitHub    : @mmsaeed509       #
-#    Developer : Mahmoud Mohamed   #
-#  﫥  Copyright : Mahmoud Mohamed   #
-#                                   #
-#####################################
-
 # Use an official Alpine Node runtime as a parent image #
 FROM node:lts-alpine
 
