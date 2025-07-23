@@ -1,4 +1,4 @@
-<h align="center"> EyeGo AI Task </h1>
+<h1 align="center"> EyeGo AI Task </h1>
 
 ### Creating Eyego app
 
@@ -141,6 +141,8 @@ kubectl apply -f deployment.yaml -f service.yaml
 - Expose loadbalancer
 
 ```bash
+minikube service eyego-service
+# or to get only the access url
 minikube service eyego-service --url
 ```
 ![](./imgs/minikube-service.png)
@@ -154,10 +156,51 @@ minikube service eyego-service --url
 ![](./imgs/minikube-service-postman.png)
 
 
-<!-- 
-### 
-<details>
-   <summary><h3> Press to see all details </h3></summary>
-</details> 
+We used the image from Docker Hub now, let's use ECR, we'll follow the official documentation of minikube: [Configure credentials for AWS Elastic Container Registry using registry-creds addon](https://minikube.sigs.k8s.io/docs/tutorials/configuring_creds_for_aws_ecr)
 
--->
+If you got this error `minikube addons configure registry-creds`
+
+```bash
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x8 pc=0x5653d408df15]
+
+goroutine 1 [running]:
+k8s.io/minikube/cmd/minikube/cmd/config.processRegistryCredsConfig({0x5653d41afe2c, 0x8}, 0x0)
+	k8s.io/minikube/cmd/minikube/cmd/config/configure_registry_creds.go:93 +0x35
+k8s.io/minikube/cmd/minikube/cmd/config.init.func8(0xc00053cf00?, {0xc000888660, 0x1, 0x5653d41a80ad?})
+	k8s.io/minikube/cmd/minikube/cmd/config/configure.go:69 +0x21e
+github.com/spf13/cobra.(*Command).execute(0x5653d768f360, {0xc000888630, 0x1, 0x1})
+	github.com/spf13/cobra@v1.9.1/command.go:1019 +0xa7b
+github.com/spf13/cobra.(*Command).ExecuteC(0x5653d768aea0)
+	github.com/spf13/cobra@v1.9.1/command.go:1148 +0x40c
+github.com/spf13/cobra.(*Command).Execute(...)
+	github.com/spf13/cobra@v1.9.1/command.go:1071
+k8s.io/minikube/cmd/minikube/cmd.Execute()
+	k8s.io/minikube/cmd/minikube/cmd/root.go:174 +0x591
+main.main()
+	k8s.io/minikube/cmd/minikube/main.go:95 +0x235
+```
+ Try downgrading minikube. I downgraded to `minikube-1.26.0-1-x86_64`
+
+- Delete the old cluster `minikube delete`
+- Reboot
+- Create a new cluster `minikube start --driver=docker`
+- `minikube addons configure registry-creds`
+  - ![](./imgs/registry-creds.png)
+- enable `minikube addons enable registry-creds`
+- upadte the `deployment.yaml`
+  - replace `image: mmsaeed509/eyego-app:v2` with `image: 143480833705.dkr.ecr.us-east-1.amazonaws.com/eyego-app`
+- deploy
+  - ![](./imgs/minikube-ecr.png)
+  - ![](./imgs/minikube-ecr-k8s-dashboard.png)
+  - ![](./imgs/minikube-ecr-test-postman.png)
+  - ![](./imgs/minikube-ecr-test-browser.png)
+---
+
+For the complex solution, we can use Terraform and Kops
+
+
+---
+Resources:
+- [How to create a REST API with Node.js and Express](https://blog.postman.com/how-to-create-a-rest-api-with-node-js-and-express)
+- [Configure credentials for AWS Elastic Container Registry using registry-creds addon](https://minikube.sigs.k8s.io/docs/tutorials/configuring_creds_for_aws_ecr)

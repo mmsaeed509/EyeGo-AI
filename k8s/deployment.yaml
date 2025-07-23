@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: eyego-js-app
-          image: mmsaeed509/eyego-app:v2  
+          image: 143480833705.dkr.ecr.us-east-1.amazonaws.com/eyego-app  
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000
