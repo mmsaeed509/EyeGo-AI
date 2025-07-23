@@ -113,7 +113,7 @@ docker compose run eyego-app
 
 ### Deploy the app on AWS EKS & Expose via LoadBalancer/Ingress
 
-Let's the our cluster localy using `minikube`
+Let's test our cluster localy using `minikube`
 > YAML k8s files that are used locally can also it used for EKS
 > So, you can configure it once and use it for both
 
