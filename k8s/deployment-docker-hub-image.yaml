@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eyego-app
+  labels:
+    app: eyego-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: eyego-app
+  template:
+    metadata:
+      labels:
+        app: eyego-app
+    spec:
+      containers:
+        - name: eyego-js-app
+          image: mmsaeed509/eyego-app:v2  
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
