@@ -195,12 +195,118 @@ main.main()
   - ![](./imgs/minikube-ecr-k8s-dashboard.png)
   - ![](./imgs/minikube-ecr-test-postman.png)
   - ![](./imgs/minikube-ecr-test-browser.png)
----
-
-For the complex solution, we can use Terraform and Kops
-
 
 ---
-Resources:
+
+### Deploy to EKS
+
+- I'll use `eksctl` to create a cluster, now create a new cluster
+
+```bash
+cd k8s
+eksctl create cluster -f cluster.yaml
+```
+
+It will take some time as it uses CloudFormation to create and manage the cluster, EC2, VPC, and all needed resources
+
+- update `kubectl` to connect to `EKS` cluster
+
+```bash
+aws eks --region us-east-1 update-kubeconfig --name eyego-cls
+```
+- deploy
+
+```bash
+kubectl apply -f deployment.yaml -f service.yaml
+```
+- see pods `kubectl get pods`
+
+```bash
+NAME                         READY   STATUS    RESTARTS   AGE
+eyego-app-67c5cb48dd-nrgfg   0/1     Pending   0          23s
+eyego-app-67c5cb48dd-s6phv   0/1     Pending   0          23s
+```
+
+Why get stuck? After troubleshooting, I found the `t3.micro` reached the maximum No. pods
+
+run this command `kubectl describe pod eyego-app-67c5cb48dd-nrgfg`
+or grep the `Events`, use `kubectl describe pod eyego-app-67c5cb48dd-nrgfg | grep Events`
+
+```bash
+Events:
+  Type     Reason            Age   From               Message
+  ----     ------            ----  ----               -------
+  Warning  FailedScheduling  67s   default-scheduler  0/2 nodes are available: 2 Too many pods. preemption: 0/2 nodes are available: 2 No preemption victims found for incoming pod.
+```
+
+Why get the maximum No. pods? because there are running pods::
+- metrics-server (2 pods)
+- coredns (2 pods)
+![](./imgs/max-no-pods.png)
+
+So, we should scale up EC2 instances, we can use `t3.small`, and update the cluster
+
+```bash
+eksctl delete nodegroup --cluster eyego-task-cluster --name eyego-ng
+eksctl create nodegroup --config-file cluster.yaml
+```
+
+If you get errors, delete the cluster and create it again
+
+```bash
+eksctl delete cluster -f cluster.yaml
+eksctl create cluster -f cluster.yaml
+```
+
+if you get this error
+![](./imgs/forbidden-pod.png)
+
+- Create an access entry for your IAM and give the necessary permissions
+- create entry
+  - `aws eks create-access-entry --cluster-name your-cluster-name --principal-arn <your-iam-arn> --region your-region`
+
+  - `aws eks create-access-entry --cluster-name eyego-task-cluster --principal-arn arn:aws:iam::143480833705:root --region us-east-1`
+
+- gives permissions
+  - `aws eks associate-access-policy --cluster-name your-cluster-name --principal-arn <your-iam-arn> --policy-arn <policy-arn> --access-scope type=cluster --region your-region`
+
+```
+aws eks associate-access-policy --cluster-name eyego-task-cluster --principal-arn arn:aws:iam::143480833705:root --policy-arn arn:aws:eks::aws:cluster-access-policy/AmazonEKSViewPolicy --access-scope type=cluster --region us-east-1
+
+aws eks associate-access-policy --cluster-name eyego-task-cluster --principal-arn arn:aws:iam::143480833705:root --policy-arn arn:aws:eks::aws:cluster-access-policy/AmazonEKSEditPolicy --access-scope type=cluster --region us-east-1
+
+aws eks associate-access-policy --cluster-name eyego-task-cluster --principal-arn arn:aws:iam::143480833705:root --policy-arn arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy --access-scope type=cluster --region us-east-1
+```
+
+![](./imgs/entry-IAM-test.png)
+
+get the service `kubectl get service eyego-service`, you can access with `EXTERNAL-IP`
+![](./imgs/eks-kubectl-get-service.png)
+
+- visit [a53bd79ec6deb486bb236ff0907c7b31-2019726146.us-east-1.elb.amazonaws.com/eyego](a53bd79ec6deb486bb236ff0907c7b31-2019726146.us-east-1.elb.amazonaws.com/eyego) from browser
+
+![](./imgs/eks-deploy-test-browser.png)
+
+- test with postman
+
+![](./imgs/eks-deploy-test-postman.png)
+
+---
+
+### Deploy to EKS Using GitHub Actions
+
+
+---
+
+### For the complex solution, we can use Terraform and Kops
+
+---
+
+### Resources:
 - [How to create a REST API with Node.js and Express](https://blog.postman.com/how-to-create-a-rest-api-with-node-js-and-express)
 - [Configure credentials for AWS Elastic Container Registry using registry-creds addon](https://minikube.sigs.k8s.io/docs/tutorials/configuring_creds_for_aws_ecr)
+- [Amazon EKS – eksctl](https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html)
+- how to use `eksctl` with config file: [Creating and managing clusters](https://docs.aws.amazon.com/eks/latest/eksctl/creating-and-managing-clusters.html)
+- [Deploy an application to Amazon EKS](https://docs.aws.amazon.com/codecatalyst/latest/userguide/deploy-tut-eks.html)
+- [Deploying a Simple Application Using EKS: Step-by-Step Guide](https://medium.com/@tamerbenhassan/deploying-a-simple-application-using-eks-step-by-step-guide-512b1559a7bd)
+- How to create a [VPC](https://docs.aws.amazon.com/eks/latest/userguide/creating-a-vpc.html#create-vpc)
