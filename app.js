@@ -10,23 +10,19 @@ const PORT = process.env.PORT || 3000;
 
 // listen for requests
 app.listen(PORT, () => {
-  
   // log server status
   console.log(`Server running on port ${PORT}`);
-  console.log(`check API response: http://localhost:${PORT}/eyego`);
-
+  console.log(`Check API response:`);
+  console.log(`- Root endpoint: http://localhost:${PORT}/`);
+  console.log(`- Eyego endpoint: http://localhost:${PORT}/eyego`);
 });
 
-// define API endpoint
-app.get('/eyego', (request, response) => {
-
-    // define response
-    const status = {
-        "Status": "Running"
-     };
-
-    // response.send(status);
-    response.send('Hello Eyego');
-    
+// define root endpoint
+app.get('/', (req, res) => {
+  res.send('Hello Eyego');
 });
-  
+
+// define /eyego endpoint
+app.get('/eyego', (req, res) => {
+  res.send('Hello Eyego from eyego endpoint');
+});
