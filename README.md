@@ -271,6 +271,10 @@ if you get this error
 
 - gives permissions
   - `aws eks associate-access-policy --cluster-name your-cluster-name --principal-arn <your-iam-arn> --policy-arn <policy-arn> --access-scope type=cluster --region your-region`
+  - add these permissions
+    - `arn:aws:eks::aws:cluster-access-policy/AmazonEKSViewPolicy`
+    - `arn:aws:eks::aws:cluster-access-policy/AmazonEKSEditPolicy`
+    - `arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy`
 
 ```
 aws eks associate-access-policy --cluster-name eyego-task-cluster --principal-arn arn:aws:iam::143480833705:root --policy-arn arn:aws:eks::aws:cluster-access-policy/AmazonEKSViewPolicy --access-scope type=cluster --region us-east-1
@@ -302,6 +306,30 @@ get the service `kubectl get service eyego-service`, you can access with `EXTERN
 
 ### For the complex solution, we can use Terraform and Kops
 
+- Create GitHub Action Workflow
+
+```bash
+mkdir -p .github/workflows
+touch  .github/workflows/deploy.yml
+```
+
+I'm gonna use `aws-cli` IAM that I created before, Now let's create the **Secrets**
+> To access the **Secrets**
+
+> GitHub repo → `Settings` → `Secrets and Variables` → `Actions` → `Secrets`
+
+and add these **Secrets**:
+- `AWS_ACCESS_KEY_ID`     -> `ADD_YOUR_AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY` -> `ADD_YOUR_AWS_SECRET_ACCESS_KEY`
+- `AWS_REGION`            -> `us-east-1`
+- `ECR_REGISTRY`          -> `143480833705.dkr.ecr.us-east-1.amazonaws.com`
+- `ECR_REPOSITORY`        -> `eyego-app`
+- `EKS_CLUSTER_NAME`      -> `eyego-task-cluster`
+
+push to GitHub and Test `./git-push.sh`
+
+
+
 ---
 
 ### Resources:
@@ -312,3 +340,6 @@ get the service `kubectl get service eyego-service`, you can access with `EXTERN
 - [Deploy an application to Amazon EKS](https://docs.aws.amazon.com/codecatalyst/latest/userguide/deploy-tut-eks.html)
 - [Deploying a Simple Application Using EKS: Step-by-Step Guide](https://medium.com/@tamerbenhassan/deploying-a-simple-application-using-eks-step-by-step-guide-512b1559a7bd)
 - How to create a [VPC](https://docs.aws.amazon.com/eks/latest/userguide/creating-a-vpc.html#create-vpc)
+- How to Automate Build, Push, and Deploy to AWS EKS:
+  -  [CI/CD with Github action and AWS EKS](https://dlmade.medium.com/ci-cd-with-github-action-and-aws-eks-5fd9714010cd)
+  - GitOps From: [DevOps Beginners to Advanced with Projects](https://www.udemy.com/course/decodingdevops)
