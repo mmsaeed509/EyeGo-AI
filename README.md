@@ -114,7 +114,8 @@ docker compose run eyego-app
 ### Deploy the app on AWS EKS & Expose via LoadBalancer/Ingress
 
 Let's test our cluster localy using `minikube`
-> YAML k8s files that are used locally can also it used for EKS
+> YAML k8s files that are used locally can also used for EKS
+
 > So, you can configure it once and use it for both
 
 - install minikube and run the cluster and open the k8s dashboard
@@ -262,6 +263,7 @@ if you get this error
 ![](./imgs/forbidden-pod.png)
 
 - Create an access entry for your IAM and give the necessary permissions
+> If the entry exists, give the permissions only
 - create entry
   - `aws eks create-access-entry --cluster-name your-cluster-name --principal-arn <your-iam-arn> --region your-region`
 
@@ -283,7 +285,7 @@ aws eks associate-access-policy --cluster-name eyego-task-cluster --principal-ar
 get the service `kubectl get service eyego-service`, you can access with `EXTERNAL-IP`
 ![](./imgs/eks-kubectl-get-service.png)
 
-- visit [a53bd79ec6deb486bb236ff0907c7b31-2019726146.us-east-1.elb.amazonaws.com/eyego](a53bd79ec6deb486bb236ff0907c7b31-2019726146.us-east-1.elb.amazonaws.com/eyego) from browser
+- visit `a53bd79ec6deb486bb236ff0907c7b31-2019726146.us-east-1.elb.amazonaws.com/eyego` from browser
 
 ![](./imgs/eks-deploy-test-browser.png)
 
