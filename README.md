@@ -14,10 +14,6 @@
 
 ---
 
-### Demo video
-
----
-
 ### Creating Eyego app
 
 To create a simple NodeJS web app with an API returning `Hello Eyego`, we can follow this blog [How to create a REST API with Node.js and Express](https://blog.postman.com/how-to-create-a-rest-api-with-node-js-and-express)
