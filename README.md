@@ -1,12 +1,14 @@
 <h1 align="center"> EyeGo AI Task </h1>
 
-### Here's the:
+### Here's the Demo:
 - root endpoint
   - [http://a641556b9f54e48e3a879e9d6790383e-1177490290.us-east-1.elb.amazonaws.com](http://a641556b9f54e48e3a879e9d6790383e-1177490290.us-east-1.elb.amazonaws.com)
   - print `Hello Eyego`
 - eyego endpoint
   - [http://a641556b9f54e48e3a879e9d6790383e-1177490290.us-east-1.elb.amazonaws.com/eyego](http://a641556b9f54e48e3a879e9d6790383e-1177490290.us-east-1.elb.amazonaws.com/eyego)
   - print `Hello Eyego from eyego endpoint`
+
+### [Migrate from AWS EKS Setup to GCP GKE](./migrate)
 
 ---
 
