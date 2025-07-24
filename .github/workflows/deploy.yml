@@ -48,3 +48,24 @@ jobs:
       run: |
         kubectl apply -f k8s/deployment.yaml
         kubectl apply -f k8s/service.yaml
+
+    - name: Wait for LoadBalancer and Get Public URL
+      run: |
+        echo "Waiting for LoadBalancer External IP..."
+        for i in {1..30}; do
+          EXTERNAL_IP=$(kubectl get svc eyego-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+          if [[ -n "$EXTERNAL_IP" ]]; then
+              echo "Service is available at: http://$EXTERNAL_IP/eyego"
+              echo "DEPLOY_URL=http://$EXTERNAL_IP/eyego" >> $GITHUB_ENV
+              break
+          fi
+          echo "Still waiting... ($i)"
+          sleep 10
+        done
+
+    - name: Display Public Deploy URL
+      run: echo "✅ Deployed at $DEPLOY_URL"
+
+    - name: Add Deploy URL to GitHub Summary
+      run: echo "### 🚀 [Eyego App is Live]($DEPLOY_URL)" >> $GITHUB_STEP_SUMMARY
+

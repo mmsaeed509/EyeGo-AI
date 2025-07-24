@@ -328,6 +328,25 @@ and add these **Secrets**:
 
 push to GitHub and Test `./git-push.sh`
 
+![](./imgs/gh-a-1.png)
+
+let's check the pods and get the IP
+```bash
+$ kubectl get pods
+NAME                         READY   STATUS    RESTARTS   AGE
+eyego-app-6d59758998-lpf6g   1/1     Running   0          3m54s
+eyego-app-6d59758998-w7bqz   1/1     Running   0          3m54s
+
+# ---
+
+$ kubectl get service eyego-service
+NAME            TYPE           CLUSTER-IP     EXTERNAL-IP                                                               PORT(S)        AGE
+eyego-service   LoadBalancer   10.100.11.62   a641556b9f54e48e3a879e9d6790383e-1177490290.us-east-1.elb.amazonaws.com   80:30090/TCP   4m35s
+```
+
+test using browser and postman
+
+![](./imgs/gh-a-2.png)
 
 
 ---
