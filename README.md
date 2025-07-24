@@ -10,6 +10,8 @@
 
 ### [Migrate from AWS EKS Setup to GCP GKE](./migrate)
 
+### [Demo video](./video)
+
 ---
 
 ### Demo video
