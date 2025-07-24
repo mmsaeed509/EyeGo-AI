@@ -55,10 +55,10 @@ jobs:
         for i in {1..30}; do
           EXTERNAL_HOSTNAME=$(kubectl get svc eyego-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
           if [[ -n "$EXTERNAL_HOSTNAME" ]]; then
-              DEPLOY_URL="https://$EXTERNAL_HOSTNAME/eyego"
-              echo "Service is available at: $DEPLOY_URL"
-              echo "DEPLOY_URL=$DEPLOY_URL" >> $GITHUB_ENV
-              break
+            DEPLOY_URL="https://$EXTERNAL_HOSTNAME/eyego"
+            echo "Service is available at: $DEPLOY_URL"
+            echo "DEPLOY_URL=$DEPLOY_URL" >> $GITHUB_ENV
+            break
           fi
           echo "Still waiting... ($i)"
           sleep 10
