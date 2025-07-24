@@ -1,0 +1,43 @@
+name: Deploy to GCP GKE
+
+on:
+  push:
+    branches: [ "master" ]
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  CLUSTER_NAME: ${{ secrets.GKE_CLUSTER }}
+  CLUSTER_ZONE: ${{ secrets.GKE_ZONE }}
+  IMAGE: eyego-app
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+    - name: Configure Docker to use GCR
+      run: gcloud auth configure-docker
+
+    - name: Build and Push Docker Image to GCR
+      run: |
+        docker build -t gcr.io/$PROJECT_ID/$IMAGE:latest .
+        docker push gcr.io/$PROJECT_ID/$IMAGE:latest
+
+    - name: Get GKE Credentials
+      uses: google-github-actions/get-gke-credentials@v1
+      with:
+        cluster_name: ${{ env.CLUSTER_NAME }}
+        location: ${{ env.CLUSTER_ZONE }}
+
+    - name: Deploy to GKE using kubectl
+      run: |
+        kubectl apply -f k8s/deployment.yaml
+        kubectl apply -f k8s/service.yaml

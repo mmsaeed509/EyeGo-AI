@@ -1,0 +1,20 @@
+apiVersion: container.cnrm.cloud.google.com/v1beta1
+kind: ContainerCluster
+metadata:
+  name: eyego-gke-cluster
+  namespace: gke-system
+spec:
+  location: us-central1-a
+  initialNodeCount: 2
+  nodeConfig:
+    machineType: e2-medium
+    diskSizeGb: 20
+    oauthScopes:
+      - https://www.googleapis.com/auth/cloud-platform
+  networking:
+    network: default
+    subnetwork: default
+  loggingService: logging.googleapis.com/kubernetes
+  monitoringService: monitoring.googleapis.com/kubernetes
+  releaseChannel:
+    channel: REGULAR
