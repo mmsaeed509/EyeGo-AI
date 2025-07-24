@@ -3,8 +3,13 @@
 ### Here's the:
 - root endpoint
   - [http://a641556b9f54e48e3a879e9d6790383e-1177490290.us-east-1.elb.amazonaws.com](http://a641556b9f54e48e3a879e9d6790383e-1177490290.us-east-1.elb.amazonaws.com)
+  - print `Hello Eyego`
 - eyego endpoint
   - [http://a641556b9f54e48e3a879e9d6790383e-1177490290.us-east-1.elb.amazonaws.com/eyego](http://a641556b9f54e48e3a879e9d6790383e-1177490290.us-east-1.elb.amazonaws.com/eyego)
+  - print `Hello Eyego from eyego endpoint`
+
+---
+
 ### Creating Eyego app
 
 To create a simple NodeJS web app with an API returning `Hello Eyego`, we can follow this blog [How to create a REST API with Node.js and Express](https://blog.postman.com/how-to-create-a-rest-api-with-node-js-and-express)
