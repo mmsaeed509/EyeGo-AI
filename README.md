@@ -351,6 +351,15 @@ test using browser and postman
 
 Let's update the `app.js` API endpoint and see the
 
+Test root endpoint `http://a641556b9f54e48e3a879e9d6790383e-1177490290.us-east-1.elb.amazonaws.com`
+
+![](./imgs/test-root-endpoint.png)
+
+
+Test eyego endpoint `http://a641556b9f54e48e3a879e9d6790383e-1177490290.us-east-1.elb.amazonaws.com/eyego`
+
+![](./imgs/test-eyego-endpoint.png)
+
 ---
 
 ### Resources:
